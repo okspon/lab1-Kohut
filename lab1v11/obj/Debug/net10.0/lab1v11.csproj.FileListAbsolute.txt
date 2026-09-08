@@ -1,0 +1,14 @@
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\bin\Debug\net10.0\lab1v11.exe
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\bin\Debug\net10.0\lab1v11.deps.json
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\bin\Debug\net10.0\lab1v11.runtimeconfig.json
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\bin\Debug\net10.0\lab1v11.dll
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\bin\Debug\net10.0\lab1v11.pdb
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\lab1v11.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\lab1v11.AssemblyInfoInputs.cache
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\lab1v11.AssemblyInfo.cs
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\lab1v11.csproj.CoreCompileInputs.cache
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\lab1v11.dll
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\refint\lab1v11.dll
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\lab1v11.pdb
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\lab1v11.genruntimeconfig.cache
+C:\Users\user\Documents\лабораторні ооп\OOP-Когут\lab1v11\obj\Debug\net10.0\ref\lab1v11.dll
