@@ -1,0 +1,14 @@
+C:\Users\user\OOP-Когут\lab3v11\bin\Debug\net10.0\lab3v11.exe
+C:\Users\user\OOP-Когут\lab3v11\bin\Debug\net10.0\lab3v11.deps.json
+C:\Users\user\OOP-Когут\lab3v11\bin\Debug\net10.0\lab3v11.runtimeconfig.json
+C:\Users\user\OOP-Когут\lab3v11\bin\Debug\net10.0\lab3v11.dll
+C:\Users\user\OOP-Когут\lab3v11\bin\Debug\net10.0\lab3v11.pdb
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\lab3v11.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\lab3v11.AssemblyInfoInputs.cache
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\lab3v11.AssemblyInfo.cs
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\lab3v11.csproj.CoreCompileInputs.cache
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\lab3v11.dll
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\refint\lab3v11.dll
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\lab3v11.pdb
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\lab3v11.genruntimeconfig.cache
+C:\Users\user\OOP-Когут\lab3v11\obj\Debug\net10.0\ref\lab3v11.dll
