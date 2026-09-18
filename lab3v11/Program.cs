@@ -2,7 +2,6 @@
 
 namespace Lab3
 {
-    // Варіант 11: Клас CryptoStream
     public class CryptoStream : IDisposable
     {
         private string _algorithm;
@@ -92,14 +91,12 @@ namespace Lab3
             Console.WriteLine();
 
             Console.WriteLine("=== 3. Без Dispose(), через GC ===");
-            CreateAndForgetStream(); // Виносимо об'єкт в окремий метод
+            CreateAndForgetStream(); 
 
-            // Примусовий запуск збирача сміття
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
 
-        // Окремий метод гарантує, що об'єкт втрачає посилання
         static void CreateAndForgetStream()
         {
             CryptoStream stream3 = new CryptoStream("SHA-256");
