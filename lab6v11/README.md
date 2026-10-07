@@ -66,4 +66,4 @@ virtual використовується в базовому класі для �
 (статичне зв'язування): Якщо посилання типу похідного класу
 (Guitar g = new Guitar()) $\rightarrow$ викликається new-версія з Guitar.Якщо посилання типу базового класу (Instrument i = new Guitar()) $\rightarrow$ викликається оригінальна версія з Instrument.
 
-<img width="1074" height="360" alt="Знімок екрана 2026-10-07 185231" src="https://github.com/user-attachments/assets/d5621f5e-7a99-468e-aca2-49be2c5d8901" />
+<img width="717" height="232" alt="Знімок екрана 2026-10-07 184408" src="https://github.com/user-attachments/assets/e9cc7e40-5eed-4f42-b78f-ea3f69a1a9b1" />
