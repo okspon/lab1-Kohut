@@ -9,7 +9,7 @@ public class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        Console.WriteLine("=== 1. Поліморфізм через System.Object (ToString) ===");
+        Console.WriteLine("1. Поліморфізм через System.Object (ToString)");
         List<object> objects = new List<object>
         {
             new Product("Ноутбук", 35000.00m),
@@ -23,7 +23,7 @@ public class Program
             Console.WriteLine(obj.ToString());
         }
 
-        Console.WriteLine("\n=== 2. Поліморфізм через IEnumerable<T> ===");
+        Console.WriteLine("\n 2. Поліморфізм через IEnumerable<T>");
         MyCustomCollection collection = new MyCustomCollection();
         collection.Add("Елемент 1");
         collection.Add("Елемент 2");
@@ -35,7 +35,7 @@ public class Program
             Console.WriteLine($"Отримано з власної колекції: {item}");
         }
 
-        Console.WriteLine("\n=== 3. Поліморфізм через абстрактний клас System.IO.Stream ===");
+        Console.WriteLine("\n 3. Поліморфізм через абстрактний клас System.IO.Stream");
         string testFilePath = "test_file.txt";
         File.WriteAllText(testFilePath, "Hello, Stream Polymorphism!");
 
