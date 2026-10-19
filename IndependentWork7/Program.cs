@@ -8,8 +8,6 @@ public class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        Console.WriteLine("=== Демонстрація роботи Cache<TKey, TValue> (FIFO) ===\n");
-
         Cache<string, string> cache = new Cache<string, string>(3);
 
         Console.WriteLine("Додаємо: Key1, Key2, Key3");
