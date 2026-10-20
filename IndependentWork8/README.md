@@ -1,4 +1,4 @@
-# Самостійна робота №8: Dictionary<TKey, TValue> та HashSet<T>
+# Самостійна робота №8
 
 **Тема:** Вивчення `Dictionary<TKey, TValue>` та `HashSet<T>` у бібліотеках .NET.
 
