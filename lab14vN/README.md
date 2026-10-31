@@ -49,4 +49,10 @@ Func<T, TResult> представляє метод, який приймає па
 
 Продуктивність: При роботі зі значущими типами (наприклад, int, double) відсутні витрати ресурсів на упаковку/розпаковку (boxing/unboxing), на відміну від роботи з не-узагальненим типом object.
 
+## Реалізований метод
+Реалізовано статичний узагальнений метод:
+`public static int Count<T>(IEnumerable<T> collection, Predicate<T> predicate)`
+
+Метод повертає кількість елементів у колекції, що задовольняють умову `predicate`. Реалізовано через власний цикл `foreach` без використання готового LINQ-оператора `Enumerable.Count()`.
+
 <img width="657" height="357" alt="image" src="https://github.com/user-attachments/assets/832b81eb-1e88-42c6-917d-b739318a5140" />
