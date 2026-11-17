@@ -87,7 +87,7 @@ namespace Lab17v11
 
             for (int page = 1; page <= totalPages; page++)
             {
-                Console.WriteLine($"\n--- Сторінка {page} з {totalPages} ---");
+                Console.WriteLine($"\nСторінка {page} з {totalPages}:");
                 var pageItems = events.GetPage(page, pageSize);
 
                 foreach (var ev in pageItems)
