@@ -2,28 +2,37 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace InvertedIndexDemo;
-
-public static class TextProcessor
+namespace InvertedIndexDemo
 {
-    public static IEnumerable<string> Tokenize(string text)
+    public static class TextProcessor
     {
-        if (string.IsNullOrWhiteSpace(text))
-            return Enumerable.Empty<string>();
-
-        // Переведення в нижній регістр та вилучення слів за допомогою регулярного виразу
-        return Regex.Matches(text.ToLowerInvariant(), @"\w+")
-                    .Select(m => m.Value);
-    }
-
-    public static IEnumerable<string> RemoveStopWords(IEnumerable<string> words)
-    {
-        var stopWords = new HashSet<string>
+        private static readonly HashSet<string> StopWords = new()
         {
             "a", "an", "the", "is", "are", "was", "were",
             "in", "on", "at", "to", "for", "of", "and", "or"
         };
 
-        return words.Where(w => !stopWords.Contains(w));
+        /// <summary>
+        /// Розбиває текст на слова, видаляє пунктуацію, переводить у нижній регістр.
+        /// Зберігає символ '#' (наприклад, для "c#").
+        /// </summary>
+        public static IEnumerable<string> Tokenize(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return Enumerable.Empty<string>();
+
+            var lowerText = text.ToLowerInvariant();
+            var matches = Regex.Matches(lowerText, @"[a-zа-яіїєґ0-9#]+");
+
+            return matches.Select(m => m.Value);
+        }
+
+        /// <summary>
+        /// Видаляє стоп-слова (a, an, the, is, are, etc.)
+        /// </summary>
+        public static IEnumerable<string> RemoveStopWords(IEnumerable<string> words)
+        {
+            return words.Where(w => !StopWords.Contains(w));
+        }
     }
 }

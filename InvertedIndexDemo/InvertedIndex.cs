@@ -1,92 +1,116 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InvertedIndexDemo;
-
-public class InvertedIndex
+namespace InvertedIndexDemo
 {
-    private readonly Dictionary<string, HashSet<int>> _index;
-    private readonly Dictionary<int, Document> _documents;
-
-    public InvertedIndex()
+    public class InvertedIndex
     {
-        _index = new Dictionary<string, HashSet<int>>();
-        _documents = new Dictionary<int, Document>();
-    }
+        // Слово -> Множина ID документів
+        private readonly Dictionary<string, HashSet<int>> _index = new();
 
-    public void AddDocument(Document doc)
-    {
-        _documents[doc.Id] = doc;
+        // ID -> Документ (для швидкого отримання)
+        private readonly Dictionary<int, Document> _documents = new();
 
-        var tokens = TextProcessor.Tokenize(doc.Content);
-        var cleanWords = TextProcessor.RemoveStopWords(tokens);
+        public int DocumentCount => _documents.Count;
+        public int UniqueWords => _index.Keys.Count;
 
-        foreach (var word in cleanWords)
+        /// <summary>
+        /// Додає документ до індексу
+        /// </summary>
+        public void AddDocument(Document doc)
         {
-            if (!_index.ContainsKey(word))
+            if (doc == null) return;
+
+            _documents[doc.Id] = doc;
+
+            // Токенізуємо заголовок і вміст, прибираємо стоп-слова
+            var tokens = TextProcessor.Tokenize($"{doc.Title} {doc.Content}");
+            var filteredTokens = TextProcessor.RemoveStopWords(tokens);
+
+            foreach (var word in filteredTokens)
             {
-                _index[word] = new HashSet<int>();
+                if (!_index.TryGetValue(word, out var docIds))
+                {
+                    docIds = new HashSet<int>();
+                    _index[word] = docIds;
+                }
+                docIds.Add(doc.Id);
             }
-            _index[word].Add(doc.Id);
         }
-    }
 
-    public List<Document> SearchSingleWord(string word)
-    {
-        var normalized = word.ToLowerInvariant();
-        if (_index.TryGetValue(normalized, out var docIds))
+        /// <summary>
+        /// Шукає документи, що містять слово
+        /// </summary>
+        public List<Document> SearchSingleWord(string word)
         {
+            var normalized = TextProcessor.Tokenize(word).FirstOrDefault();
+            if (string.IsNullOrEmpty(normalized) || !_index.TryGetValue(normalized, out var docIds))
+            {
+                return new List<Document>();
+            }
+
             return docIds.Select(id => _documents[id]).ToList();
         }
-        return new List<Document>();
-    }
 
-    public List<Document> SearchMultipleWords(params string[] words)
-    {
-        var cleanWords = TextProcessor.RemoveStopWords(words.SelectMany(TextProcessor.Tokenize)).ToList();
-        if (!cleanWords.Any()) return new List<Document>();
-
-        HashSet<int>? resultDocIds = null;
-
-        foreach (var word in cleanWords)
+        /// <summary>
+        /// Шукає документи, що містять ВСІ слова (AND)
+        /// </summary>
+        public List<Document> SearchMultipleWords(params string[] words)
         {
-            if (_index.TryGetValue(word, out var docIds))
+            if (words == null || words.Length == 0)
+                return new List<Document>();
+
+            var normalizedWords = words
+                .SelectMany(TextProcessor.Tokenize)
+                .Distinct()
+                .ToList();
+
+            if (normalizedWords.Count == 0)
+                return new List<Document>();
+
+            // Якщо хоча б одного слова немає в індексі, перетин буде порожнім
+            if (!_index.TryGetValue(normalizedWords[0], out var firstSet))
+                return new List<Document>();
+
+            var resultIds = new HashSet<int>(firstSet);
+
+            for (int i = 1; i < normalizedWords.Count; i++)
             {
-                if (resultDocIds == null)
+                if (_index.TryGetValue(normalizedWords[i], out var nextSet))
                 {
-                    resultDocIds = new HashSet<int>(docIds);
+                    resultIds.IntersectWith(nextSet);
                 }
                 else
                 {
-                    resultDocIds.IntersectWith(docIds); // Логічне "AND"
+                    return new List<Document>();
                 }
             }
-            else
-            {
-                return new List<Document>(); // Якщо хоча б одного слова немає
-            }
+
+            return resultIds.Select(id => _documents[id]).ToList();
         }
 
-        return (resultDocIds ?? new HashSet<int>()).Select(id => _documents[id]).ToList();
-    }
-
-    public List<Document> SearchAnyWord(params string[] words)
-    {
-        var cleanWords = TextProcessor.RemoveStopWords(words.SelectMany(TextProcessor.Tokenize)).ToList();
-        var resultDocIds = new HashSet<int>();
-
-        foreach (var word in cleanWords)
+        /// <summary>
+        /// Шукає документи, що містять БУДЬ-ЯКЕ слово (OR)
+        /// </summary>
+        public List<Document> SearchAnyWord(params string[] words)
         {
-            if (_index.TryGetValue(word, out var docIds))
+            if (words == null || words.Length == 0)
+                return new List<Document>();
+
+            var resultIds = new HashSet<int>();
+
+            foreach (var rawWord in words)
             {
-                resultDocIds.UnionWith(docIds); // Логічне "OR"
+                foreach (var word in TextProcessor.Tokenize(rawWord))
+                {
+                    if (_index.TryGetValue(word, out var docIds))
+                    {
+                        resultIds.UnionWith(docIds);
+                    }
+                }
             }
+
+            return resultIds.Select(id => _documents[id]).ToList();
         }
-
-        return resultDocIds.Select(id => _documents[id]).ToList();
     }
-
-    public int DocumentCount => _documents.Count;
-    public int UniqueWords => _index.Keys.Count;
 }

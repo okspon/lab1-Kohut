@@ -1,10 +1,11 @@
-namespace InvertedIndexDemo;
-
-public class Document
+namespace InvertedIndexDemo
 {
-    public int Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
+    public class Document
+    {
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
+        public string Content { get; set; } = string.Empty;
 
-    public override string ToString() => $"[{Id}] {Title}";
+        public override string ToString() => $"[{Id}] {Title}";
+    }
 }

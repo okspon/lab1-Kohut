@@ -5,7 +5,7 @@ using lab9_self_vN;
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
 // 1. Колекція об'єктів: List<Product>
-Console.WriteLine("=== 1. Робота з колекцією List<Product> ===");
+Console.WriteLine("1. Робота з колекцією List<Product>");
 var products = new List<Product>
 {
     new Product { Name = "Ноутбук", Category = "Електроніка", Price = 32000 },
@@ -29,7 +29,7 @@ Console.WriteLine("Товари дорожчі за 1500 грн:");
 CollectionUtils.ForEach(expensiveProducts, p => Console.WriteLine($"  - {p.Name} ({p.Price} грн)"));
 
 // 2. Колекція цілих чисел: List<int>
-Console.WriteLine("\n=== 2. Робота з колекцією List<int> ===");
+Console.WriteLine("\n2. Робота з колекцією List<int>");
 var numbers = new List<int> { 4, 15, 8, 23, 42, 11, 6 };
 
 // Filter: лише парні числа
@@ -50,7 +50,7 @@ CollectionUtils.ForEach(numbers, n => sum += n);
 Console.WriteLine($"Сума всіх чисел: {sum}");
 
 // 3. Колекція рядків: List<string>
-Console.WriteLine("\n=== 3. Робота з колекцією List<string> ===");
+Console.WriteLine("\n3. Робота з колекцією List<string>");
 var languages = new List<string> { "C#", "Python", "TypeScript", "Go", "Rust" };
 
 // MaxBy: найдовша назва мови програмування
