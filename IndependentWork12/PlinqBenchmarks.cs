@@ -21,9 +21,7 @@ namespace IndependentWork12
             return list;
         }
 
-        /// <summary>
         /// Обчислювально інтенсивна операція: перевірка на простоту + математичні перетворення
-        /// </summary>
         public static double HeavyCompute(int number)
         {
             bool isPrime = true;
@@ -45,12 +43,10 @@ namespace IndependentWork12
             return acc;
         }
 
-        /// <summary>
         /// Порівняння продуктивності LINQ та PLINQ на заданому розмірі колекції
-        /// </summary>
         public static void ComparePerformance(int size)
         {
-            Console.WriteLine($"--- Експеримент: {size:N0} елементів (важка обчислювальна операція) ---");
+            Console.WriteLine($"Експеримент: {size:N0} елементів (важка обчислювальна операція)");
             var data = GenerateData(size);
 
             // 1. Звичайний послідовний LINQ
@@ -77,12 +73,10 @@ namespace IndependentWork12
             Console.WriteLine($"  Прискорення: {speedup:F2}x (використано логічних ядер: {Environment.ProcessorCount})\n");
         }
 
-        /// <summary>
         /// Контрольний тест: коли PLINQ може бути повільнішим за LINQ (дешева операція)
-        /// </summary>
         public static void CompareTrivialOperation(int size = 1_000_000)
         {
-            Console.WriteLine($"--- Контрольний тест: {size:N0} елементів (дуже дешева операція x * 2) ---");
+            Console.WriteLine($"Контрольний тест: {size:N0} елементів (дуже дешева операція x * 2)");
             var data = GenerateData(size);
 
             var swLinq = Stopwatch.StartNew();
@@ -102,7 +96,7 @@ namespace IndependentWork12
         /// </summary>
         public static void DemonstrateThreadSafety()
         {
-            Console.WriteLine("=== Дослідження безпеки PLINQ: побічні ефекти та Race Condition ===");
+            Console.WriteLine("Дослідження безпеки PLINQ: побічні ефекти та Race Condition");
             var data = Enumerable.Range(1, 1_000_000).ToList();
             int expected = data.Count(x => x % 2 == 0);
             Console.WriteLine($"Очікувана кількість парних чисел: {expected:N0}\n");
