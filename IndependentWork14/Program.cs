@@ -3,7 +3,7 @@ using IndependentWork14;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-Console.WriteLine("=== Сценарій 1: FileMetadataCache (Dictionary) ===");
+Console.WriteLine("Сценарій 1: FileMetadataCache (Dictionary)");
 var fileCache = new FileMetadataCache();
 fileCache.Add(@"C:\Docs\report.pdf", new FileMetadata
 {
@@ -25,7 +25,7 @@ Console.WriteLine($"Отримано: {fileCache.Get(@"C:\Docs\report.pdf")}");
 fileCache.Remove(@"C:\Docs\notes.txt");
 Console.WriteLine($"Кількість файлів у кеші після видалення: {fileCache.Count}\n");
 
-Console.WriteLine("=== Сценарій 2: TagManager (HashSet) ===");
+Console.WriteLine("Сценарій 2: TagManager (HashSet)");
 var tagManager = new TagManager();
 tagManager.AddTag("post-1", "C#");
 tagManager.AddTag("post-1", "DOTNET");
@@ -42,7 +42,7 @@ Console.WriteLine($"Унікальні теги лише для post-1 (ExceptWi
 tagManager.RemoveTag("post-1", "Performance");
 Console.WriteLine($"Спільні теги після видалення 'Performance' з post-1: {string.Join(", ", tagManager.FindCommonTags("post-1", "post-2"))}\n");
 
-Console.WriteLine("=== Сценарій 3: SearchIndex (Dictionary + HashSet) ===");
+Console.WriteLine("Сценарій 3: SearchIndex (Dictionary + HashSet)");
 var searchIndex = new SearchIndex();
 searchIndex.AddDocument(1, "C# and .NET provide fast generic collections like Dictionary and HashSet.");
 searchIndex.AddDocument(2, "Dictionary uses a hash table for O(1) key lookup in .NET.");
