@@ -1,52 +1,71 @@
 ﻿using System;
+using System.Net.Http;
 using IndependentWork14;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-Console.WriteLine("Сценарій 1: FileMetadataCache (Dictionary)");
-var fileCache = new FileMetadataCache();
-fileCache.Add(@"C:\Docs\report.pdf", new FileMetadata
+var policy = new RetryPolicy(
+    maxRetries: 3,
+    initialDelay: TimeSpan.FromMilliseconds(300),
+    jitterFactor: 0.25);
+
+
+// СЦЕНАРІЙ 1: Операція спочатку падає з тимчасовою помилкою, потім успішна
+
+Console.WriteLine("Сценарій 1: Тимчасовий збій API -> Успіх після повторів");
+int apiCalls = 0;
+
+try
 {
-    FileName = "report.pdf",
-    Size = 204800,
-    LastModified = DateTime.Now,
-    Hash = "A1B2C3D4"
-});
-fileCache.Add(@"C:\Docs\notes.txt", new FileMetadata
+    decimal rate = policy.Execute(
+        operation: () =>
+        {
+            apiCalls++;
+            if (apiCalls <= 2)
+            {
+                throw new TimeoutException($"Таймаут відповіді банківського API (виклик #{apiCalls})");
+            }
+            return 41.85m;
+        },
+        shouldRetry: ex => ex is TimeoutException or HttpRequestException);
+
+    Console.WriteLine($"[Main] Отримано актуальний курс USD: {rate} грн\n");
+}
+catch (Exception ex)
 {
-    FileName = "notes.txt",
-    Size = 4096,
-    LastModified = DateTime.Now.AddHours(-2),
-    Hash = "E5F6G7H8"
-});
+    Console.WriteLine($"[Main] Неочікувана помилка: {ex.Message}\n");
+}
 
-Console.WriteLine($"Чи є report.pdf (перевірка без урахування регістру): {fileCache.Contains(@"c:\docs\REPORT.PDF")}");
-Console.WriteLine($"Отримано: {fileCache.Get(@"C:\Docs\report.pdf")}");
-fileCache.Remove(@"C:\Docs\notes.txt");
-Console.WriteLine($"Кількість файлів у кеші після видалення: {fileCache.Count}\n");
+// СЦЕНАРІЙ 2: Операція завжди падає -> викидання винятку після всіх спроб
+Console.WriteLine("Сценарій 2: Постійний збій -> Вичерпання maxRetries та виняток");
+int dbCalls = 0;
 
-Console.WriteLine("Сценарій 2: TagManager (HashSet)");
-var tagManager = new TagManager();
-tagManager.AddTag("post-1", "C#");
-tagManager.AddTag("post-1", "DOTNET");
-tagManager.AddTag("post-1", "c#"); // Дублікат не додасться
-tagManager.AddTag("post-1", "Performance");
+try
+{
+    string data = policy.Execute<string>(
+        operation: () =>
+        {
+            dbCalls++;
+            throw new HttpRequestException($"503 Service Unavailable (спроба підключення #{dbCalls})");
+        },
+        shouldRetry: ex => ex is TimeoutException or HttpRequestException);
 
-tagManager.AddTag("post-2", "dotnet");
-tagManager.AddTag("post-2", "Architecture");
-tagManager.AddTag("post-2", "Performance");
+    Console.WriteLine($"[Main] Дані: {data}\n");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[Main] Перехоплено остаточний виняток після {dbCalls} спроб: [{ex.GetType().Name}] {ex.Message}\n");
+}
 
-Console.WriteLine($"Усі унікальні теги (UnionWith): {string.Join(", ", tagManager.GetAllUniqueTags())}");
-Console.WriteLine($"Спільні теги post-1 і post-2 (IntersectWith): {string.Join(", ", tagManager.FindCommonTags("post-1", "post-2"))}");
-Console.WriteLine($"Унікальні теги лише для post-1 (ExceptWith): {string.Join(", ", tagManager.FindUniqueTagsForFirstArticle("post-1", "post-2"))}");
-tagManager.RemoveTag("post-1", "Performance");
-Console.WriteLine($"Спільні теги після видалення 'Performance' з post-1: {string.Join(", ", tagManager.FindCommonTags("post-1", "post-2"))}\n");
-
-Console.WriteLine("Сценарій 3: SearchIndex (Dictionary + HashSet)");
-var searchIndex = new SearchIndex();
-searchIndex.AddDocument(1, "C# and .NET provide fast generic collections like Dictionary and HashSet.");
-searchIndex.AddDocument(2, "Dictionary uses a hash table for O(1) key lookup in .NET.");
-searchIndex.AddDocument(3, "HashSet stores unique elements and supports set operations.");
-
-Console.WriteLine($"Документи зі словом 'Dictionary': [{string.Join(", ", searchIndex.Search("Dictionary"))}]");
-Console.WriteLine($"Документи зі словами 'Dictionary' ТА '.NET': [{string.Join(", ", searchIndex.SearchMultiple("Dictionary", ".NET"))}]");
+// СЦЕНАРІЙ 3: Помилка, яку НЕ варто повторювати (фільтр shouldRetry)
+Console.WriteLine("Сценарій 3: Критична помилка (shouldRetry = false -> негайний вихід)");
+try
+{
+    policy.Execute<int>(
+        operation: () => throw new UnauthorizedAccessException("Недійсний API-ключ доступу"),
+        shouldRetry: ex => ex is TimeoutException or HttpRequestException);
+}
+catch (UnauthorizedAccessException ex)
+{
+    Console.WriteLine($"[Main] Повторів не виконувалось. Перехоплено критичну помилку: {ex.Message}\n");
+}
