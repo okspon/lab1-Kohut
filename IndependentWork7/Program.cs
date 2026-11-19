@@ -1,28 +1,28 @@
-﻿using System.Text;
+﻿using System;
+using IndependentWork7;
 
-namespace IndependentWork7;
+var cache = new Cache<string, string>(3);
 
-public class Program
+Console.WriteLine("Додаємо 3 елементи (ємність кешу = 3):");
+cache.Add("user_1", "Олександр");
+cache.Add("user_2", "Марія");
+cache.Add("user_3", "Іван");
+
+Console.WriteLine($"Кількість елементів: {cache.Count}");
+Console.WriteLine($"Отримуємо user_1: {cache.Get("user_1")}");
+
+Console.WriteLine("\nДодаємо 4-й елемент (user_4). Найстаріший (user_1) має видалитися:");
+cache.Add("user_4", "Олена");
+
+Console.WriteLine($"Кількість елементів: {cache.Count}");
+Console.WriteLine($"Чи є user_1 у кеші? {cache.ContainsKey("user_1")}");
+Console.WriteLine($"Чи є user_4 у кеші? {cache.ContainsKey("user_4")}");
+
+try
 {
-    public static void Main(string[] args)
-    {
-        Console.OutputEncoding = Encoding.UTF8;
-
-        Cache<string, string> cache = new Cache<string, string>(3);
-
-        Console.WriteLine("Додаємо: Key1, Key2, Key3");
-        cache.Add("Key1", "Значення 1");
-        cache.Add("Key2", "Значення 2");
-        cache.Add("Key3", "Значення 3");
-
-        Console.WriteLine($"Поточний Count: {cache.Count}");
-        Console.WriteLine($"Отримано Key2: {cache.Get("Key2")}\n");
-
-        Console.WriteLine("Додаємо Key4 (кеш повний, Key1 має видалитися)...");
-        cache.Add("Key4", "Значення 4");
-
-        Console.WriteLine($"Чи є Key1 у кеші? -> {cache.ContainsKey("Key1")}");
-        Console.WriteLine($"Чи є Key4 у кеші? -> {cache.ContainsKey("Key4")}");
-        Console.WriteLine($"Поточний Count: {cache.Count}");
-    }
+    Console.WriteLine(cache.Get("user_1"));
+}
+catch (KeyNotFoundException ex)
+{
+    Console.WriteLine($"Очікувана помилка: {ex.Message}");
 }

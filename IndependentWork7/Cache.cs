@@ -1,56 +1,76 @@
-namespace IndependentWork7;
+using System;
+using System.Collections.Generic;
 
-public class Cache<TKey, TValue> where TKey : notnull
+namespace IndependentWork7
 {
-    private readonly int _capacity;
-    private readonly Dictionary<TKey, TValue> _cache;
-    private readonly Queue<TKey> _keysOrder;
-
-    public int Count => _cache.Count;
-
-    public Cache(int capacity)
+    public class Cache<TKey, TValue> where TKey : notnull
     {
-        if (capacity <= 0)
+        private readonly int _capacity;
+        private readonly Dictionary<TKey, TValue> _cache;
+        private readonly Queue<TKey> _keysOrder;
+
+        public Cache(int capacity)
         {
-            throw new ArgumentException("Ємність кешу повинна бути більшою за 0.", nameof(capacity));
+            if (capacity <= 0)
+            {
+                throw new ArgumentException("Ємність кешу має бути більшою за нуль.", nameof(capacity));
+            }
+
+            _capacity = capacity;
+            _cache = new Dictionary<TKey, TValue>(capacity);
+            _keysOrder = new Queue<TKey>(capacity);
         }
 
-        _capacity = capacity;
-        _cache = new Dictionary<TKey, TValue>();
-        _keysOrder = new Queue<TKey>();
-    }
+        public int Count => _cache.Count;
 
-    public void Add(TKey key, TValue value)
-    {
-        if (_cache.ContainsKey(key))
+        public void Add(TKey key, TValue value)
         {
-            _cache[key] = value;
-            return;
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            // Якщо ключ вже існує — оновлюємо значення без зміни порядку в черзі (FIFO)
+            if (_cache.ContainsKey(key))
+            {
+                _cache[key] = value;
+                return;
+            }
+
+            // Якщо кеш заповнений — видаляємо найстаріший елемент (перший у черзі)
+            if (_cache.Count >= _capacity)
+            {
+                TKey oldestKey = _keysOrder.Dequeue();
+                _cache.Remove(oldestKey);
+            }
+
+            _cache.Add(key, value);
+            _keysOrder.Enqueue(key);
         }
 
-        if (_cache.Count >= _capacity)
+        public TValue Get(TKey key)
         {
-            // Видаляємо найстаріший елемент за політикою FIFO
-            TKey oldestKey = _keysOrder.Dequeue();
-            _cache.Remove(oldestKey);
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (_cache.TryGetValue(key, out TValue? value))
+            {
+                return value;
+            }
+
+            throw new KeyNotFoundException($"Ключ '{key}' не знайдено в кеші.");
         }
 
-        _cache[key] = value;
-        _keysOrder.Enqueue(key);
-    }
-
-    public TValue Get(TKey key)
-    {
-        if (_cache.TryGetValue(key, out TValue? value))
+        public bool ContainsKey(TKey key)
         {
-            return value;
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            return _cache.ContainsKey(key);
         }
-
-        throw new KeyNotFoundException($"Ключ '{key}' не знайдено в кеші.");
-    }
-
-    public bool ContainsKey(TKey key)
-    {
-        return _cache.ContainsKey(key);
     }
 }
